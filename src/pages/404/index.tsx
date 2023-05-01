@@ -9,7 +9,7 @@ const SpotlightWrap = styled.div`
   position: relative;
 `;
 
-const SpotlightLink = styled.a`
+const SpotlightLink = styled.span`
   color: white;
   display: flex;
   flex-direction: column;
@@ -82,10 +82,10 @@ class SpotlightComponent extends React.Component {
     return (
       <SpotlightWrap onMouseMove={this.onMouseMove}>
         <ContentWrap>
-          <SpotlightLink href="#link">Page not found</SpotlightLink>
+          <SpotlightLink>Page not found</SpotlightLink>
           <ButtonErrorLink>Back to mainpage :(</ButtonErrorLink>
         </ContentWrap>
-        <Spotlight className="spotlight"></Spotlight>
+        <Spotlight className="spotlight" />
       </SpotlightWrap>
     );
   }
