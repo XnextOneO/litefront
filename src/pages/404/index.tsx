@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
 const SpotlightWrap = styled.div`
@@ -60,35 +60,45 @@ const ContentWrap = styled.div`
   transform: translate(-50%, -50%);
   z-index: 1;
 `;
-// const Migs = styled.span`
-//   animation: neon-animation 0.1s ease-in-out infinite alternate;
-// `;
 
-class SpotlightComponent extends React.Component {
-  onMouseMove = (event: React.MouseEvent) => {
+function SpotlightComponent() {
+  const handleMouseMove = useCallback((event: React.MouseEvent) => {
     const spotlight = document.querySelector('.spotlight') as HTMLElement;
-    if (spotlight && spotlight.offsetWidth) {
+    if (spotlight) {
       const w = spotlight.offsetWidth;
       const h = spotlight.offsetHeight;
       const t = event.pageY - spotlight.offsetTop;
       const l = event.pageX - spotlight.offsetLeft;
+      const distanceFromCenter = Math.sqrt((l - w / 2) ** 2 + (t - h / 2) ** 2);
+      const radius = Math.sqrt(w ** 2 + h ** 2) / 2;
+      const newRadius = Math.max(radius - distanceFromCenter, 2);
       spotlight.style.backgroundImage = `radial-gradient(circle at ${
         (l / w) * 100
-      }% ${(t / h) * 100}%, transparent 80px, rgba(0, 0, 0, 0.99) 400px)`;
+      }% ${
+        (t / h) * 100
+      }%, transparent ${newRadius}px, rgba(0, 0, 0, 0.99) 400px)`;
     }
-  };
+  }, []);
 
-  render() {
-    return (
-      <SpotlightWrap onMouseMove={this.onMouseMove}>
-        <ContentWrap>
-          <SpotlightLink>Page not found</SpotlightLink>
-          <ButtonErrorLink>Back to mainpage :(</ButtonErrorLink>
-        </ContentWrap>
-        <Spotlight className="spotlight" />
-      </SpotlightWrap>
-    );
-  }
+  const handleMouseLeave = useCallback(() => {
+    const spotlight = document.querySelector('.spotlight') as HTMLElement;
+    if (spotlight) {
+      spotlight.style.backgroundImage = 'none';
+    }
+  }, []);
+
+  return (
+    <SpotlightWrap
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      <ContentWrap>
+        <SpotlightLink>Page not found</SpotlightLink>
+        <ButtonErrorLink>Back to mainpage :(</ButtonErrorLink>
+      </ContentWrap>
+      <Spotlight className="spotlight" />
+    </SpotlightWrap>
+  );
 }
 
 export default SpotlightComponent;
