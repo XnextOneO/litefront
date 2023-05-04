@@ -2,8 +2,7 @@ import React, { useCallback } from 'react';
 import styled from 'styled-components';
 
 const SpotlightWrap = styled.div`
-  background: url('https://static-cse.canva.com/blob/846900/photo1502082553048f009c37129b9e1583341920812.jpeg')
-    no-repeat center center;
+  background: url(${getRandomBackgroundImage()}) no-repeat center center;
   background-size: cover;
   height: 100vh;
   position: relative;
@@ -61,37 +60,46 @@ const ContentWrap = styled.div`
   z-index: 1;
 `;
 
+function getRandomBackgroundImage() {
+  const images = [
+    'https://cdn.pixabay.com/photo/2018/01/14/23/12/nature-3082832_960_720.jpg',
+    'https://img.freepik.com/free-vector/cartoon-galaxy-background-with-planets_23-2148966504.jpg?w=1380&t=st=1683232024~exp=1683232624~hmac=45a627a18a93b40901bc9290ac7d517940b212715711e83ac299243340fddf9f',
+  ];
+
+  const randomIndex = Math.floor(Math.random() * images.length);
+  return images[randomIndex];
+}
+
 function SpotlightComponent() {
-  const handleMouseMove = useCallback((event: React.MouseEvent) => {
+  const onMouseMove = useCallback((event: React.MouseEvent) => {
     const spotlight = document.querySelector('.spotlight') as HTMLElement;
-    if (spotlight) {
+    if (spotlight && spotlight.offsetWidth) {
       const w = spotlight.offsetWidth;
       const h = spotlight.offsetHeight;
       const t = event.pageY - spotlight.offsetTop;
       const l = event.pageX - spotlight.offsetLeft;
-      const distanceFromCenter = Math.sqrt((l - w / 2) ** 2 + (t - h / 2) ** 2);
-      const radius = Math.sqrt(w ** 2 + h ** 2) / 2;
-      const newRadius = Math.max(radius - distanceFromCenter, 2);
+      const dx = Math.abs(event.pageX - window.innerWidth / 2);
+      const dy = Math.abs(event.pageY - window.innerHeight / 2);
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      // Set the radius of the gradient based on the distance from the center
+      const radius =
+        500 -
+        (distance * 300) /
+          Math.sqrt(
+            window.innerWidth * window.innerWidth +
+              window.innerHeight * window.innerHeight,
+          );
+
+      // Update the spotlight style
       spotlight.style.backgroundImage = `radial-gradient(circle at ${
         (l / w) * 100
-      }% ${
-        (t / h) * 100
-      }%, transparent ${newRadius}px, rgba(0, 0, 0, 0.99) 400px)`;
-    }
-  }, []);
-
-  const handleMouseLeave = useCallback(() => {
-    const spotlight = document.querySelector('.spotlight') as HTMLElement;
-    if (spotlight) {
-      spotlight.style.backgroundImage = 'none';
+      }% ${(t / h) * 100}%, transparent 80px, rgba(0, 0, 0, 0.99) ${radius}px)`;
     }
   }, []);
 
   return (
-    <SpotlightWrap
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-    >
+    <SpotlightWrap onMouseMove={onMouseMove}>
       <ContentWrap>
         <SpotlightLink>Page not found</SpotlightLink>
         <ButtonErrorLink>Back to mainpage :(</ButtonErrorLink>
@@ -100,5 +108,4 @@ function SpotlightComponent() {
     </SpotlightWrap>
   );
 }
-
 export default SpotlightComponent;
