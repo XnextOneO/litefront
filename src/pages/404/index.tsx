@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 const SpotlightWrap = styled.div`
   background: url(${getRandomBackgroundImage()}) no-repeat center center;
@@ -11,12 +11,12 @@ const SpotlightWrap = styled.div`
 const SpotlightLink = styled.span`
   color: white;
   display: flex;
-  flex-direction: column;
+
   align-items: center;
   text-shadow: 0 0 10px whitesmoke, 0 0 20px whitesmoke, 0 0 30px whitesmoke,
     0 0 40px whitesmoke;
-  font-size: 1.5rem;
   text-decoration: none;
+  font-size: 2em;
 
   &:hover {
     color: #fff;
@@ -36,7 +36,7 @@ const ButtonErrorLink = styled.button`
   color: black;
   padding: 16px 32px;
   text-align: center;
-  font-size: 16px;
+  font-size: 1.1em;
   margin: 4px 2px;
   opacity: 0.6;
   transition: 0.3s;
@@ -44,6 +44,7 @@ const ButtonErrorLink = styled.button`
   text-decoration: none;
   cursor: pointer;
   border-radius: 1em;
+
   &:hover {
     opacity: 1;
   }
@@ -58,6 +59,35 @@ const ContentWrap = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1;
+`;
+
+const blink = keyframes`
+  from {
+    opacity: 0.1;
+    text-shadow: 0 0 10px #fff,
+    0 0 20px #fff,
+    0 0 30px #fff,
+    0 0 40px #ff00de,
+    0 0 70px #ff00de,
+    0 0 80px #ff00de,
+    0 0 100px #ff00de,
+    0 0 150px #ff00de;
+  }
+  to {
+    opacity: 1;
+    text-shadow: 0 0 20px #fff,
+    0 0 30px #fff,
+    0 0 40px #fff,
+    0 0 50px #ff00de,
+    0 0 80px #ff00de,
+    0 0 90px #ff00de,
+    0 0 120px #ff00de,
+    0 0 180px #ff00de;
+  }
+`;
+
+const BlinkingO = styled.span`
+  animation: ${blink} 0.2s infinite;
 `;
 
 function getRandomBackgroundImage() {
@@ -101,7 +131,9 @@ function SpotlightComponent() {
   return (
     <SpotlightWrap onMouseMove={onMouseMove}>
       <ContentWrap>
-        <SpotlightLink>Page not found</SpotlightLink>
+        <SpotlightLink>
+          Page n<BlinkingO>o</BlinkingO>t found
+        </SpotlightLink>
         <ButtonErrorLink>Back to mainpage :(</ButtonErrorLink>
       </ContentWrap>
       <Spotlight className="spotlight" />
