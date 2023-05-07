@@ -16,13 +16,16 @@ const SpotlightLink = styled.span`
   text-shadow: 0 0 10px whitesmoke, 0 0 20px whitesmoke, 0 0 30px whitesmoke,
     0 0 40px whitesmoke;
   text-decoration: none;
-  font-size: 2em;
+  font-size: 3em;
 
   &:hover {
     color: #fff;
   }
 `;
-
+const SpotlightDescripion = styled.span`
+  color: white;
+  font-size: 0.7em;
+`;
 const Spotlight = styled.div`
   position: absolute;
   height: 100%;
@@ -36,7 +39,7 @@ const ButtonErrorLink = styled.button`
   color: black;
   padding: 16px 32px;
   text-align: center;
-  font-size: 1.1em;
+  font-size: 0.6em;
   margin: 4px 2px;
   opacity: 0.6;
   transition: 0.3s;
@@ -53,7 +56,8 @@ const ButtonErrorLink = styled.button`
 const ContentWrap = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1em;
+  align-items: center;
+  gap: 0.5em;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -115,7 +119,7 @@ function SpotlightComponent() {
       // Set the radius of the gradient based on the distance from the center
       const radius =
         500 -
-        (distance * 300) /
+        (distance * 800) /
           Math.sqrt(
             window.innerWidth * window.innerWidth +
               window.innerHeight * window.innerHeight,
@@ -134,7 +138,10 @@ function SpotlightComponent() {
         <SpotlightLink>
           Page n<BlinkingO>o</BlinkingO>t found
         </SpotlightLink>
-        <ButtonErrorLink>Back to mainpage :(</ButtonErrorLink>
+        <SpotlightDescripion>
+          Hmm, the page you were looking for doesn’t seem to exist anymore
+        </SpotlightDescripion>
+        <ButtonErrorLink>Back to mainpage</ButtonErrorLink>
       </ContentWrap>
       <Spotlight className="spotlight" />
     </SpotlightWrap>
